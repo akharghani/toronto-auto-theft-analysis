@@ -30,5 +30,6 @@ def clean_dataset(df):
     clean_df["OCC_DAY"] = clean_df["OCC_DAY"].astype(int)
     clean_df["OCC_DOY"] = clean_df["OCC_DOY"].astype(int)
     clean_df = clean_df[clean_df["OCC_YEAR"] >= 2014]
-    
+    clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].astype(str)
+
     return clean_df
