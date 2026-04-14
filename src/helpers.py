@@ -26,5 +26,9 @@ def clean_dataset(df):
                                         "REPORT_DOW", "REPORT_HOUR"])
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.split('(').str[0]
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.strip()
-
+    clean_df["OCC_YEAR"] = clean_df["OCC_YEAR"].astype(int)
+    clean_df["OCC_DAY"] = clean_df["OCC_DAY"].astype(int)
+    clean_df["OCC_DOY"] = clean_df["OCC_DOY"].astype(int)
+    clean_df = clean_df[clean_df["OCC_YEAR"] >= 2014]
+    
     return clean_df
