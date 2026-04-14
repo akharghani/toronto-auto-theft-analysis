@@ -21,9 +21,9 @@ def clean_dataset(df):
                                         "LONG_WGS84", "LAT_WGS84", "x",
                                         "y", "REPORT_DATE",
                                         "OCC_DATE", "UCR_CODE", "UCR_EXT",
-                                        "OFFENCE", "CSI_CATEGORY", "OCC_YEAR",
-                                        "OCC_MONTH", "OCC_DAY", "OCC_DOY",
-                                        "OCC_DOW", "OCC_HOUR"])
+                                        "OFFENCE", "CSI_CATEGORY", "REPORT_YEAR",
+                                        "REPORT_MONTH", "REPORT_DAY", "REPORT_DOY",
+                                        "REPORT_DOW", "REPORT_HOUR"])
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.split('(').str[0]
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.strip()
 
