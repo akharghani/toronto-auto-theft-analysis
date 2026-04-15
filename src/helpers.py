@@ -67,3 +67,35 @@ def yearly_trends_chart(df):
 
     plt.tight_layout()
     plt.show()
+
+def top10_neighbourhoods_chart(df):
+    """Plot the top 10 most affected neighbourhoods by auto theft count during the surge years of 2021 to 2023.
+
+    Parameters:
+        df: A cleaned DataFrame.
+
+    Returns:
+        None. Creates and draws the chart.
+    """
+    top10 = (df[df['OCC_YEAR'].between(2021, 2023)].groupby('NEIGHBOURHOOD_158').size()
+               .sort_values(ascending = True)
+               .tail(10))
+
+    fig, ax = plt.subplots(figsize = (12, 8))
+    ax.set_facecolor('whitesmoke')
+    fig.patch.set_facecolor('whitesmoke')
+
+    colors = ['red' if i == len(top10) - 1 else 'blue' for i in range(len(top10))]
+    bars = ax.barh(top10.index, top10.values, color = colors, edgecolor ='black', linewidth = 0.8, height = 0.6)
+
+    ax.bar_label(bars, padding = 10, fontweight = 'bold', fontsize = 14)  
+    ax.set_title('Top 10 Most Affected Neighbourhoods by Auto Theft During 2021-2023', fontsize = 16)
+    ax.set_xlabel('Number of Thefts', fontsize = 10)
+    ax.set_ylabel('Neighbourhood', fontsize = 10)
+    ax.set_xlim(0, max(top10.values) + 500)
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
