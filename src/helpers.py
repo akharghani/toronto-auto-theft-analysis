@@ -4,6 +4,7 @@ Helper functions for Toronto Auto Theft project.
 This module contains reusable functions for data cleaning,
 analysis, and visualization.
 """
+import matplotlib.pyplot as plt
 
 def clean_dataset(df):
     """Clean the raw dataset and return an analysis ready DataFrame.
@@ -33,3 +34,36 @@ def clean_dataset(df):
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].astype(str)
 
     return clean_df
+
+def yearly_trends_chart(df):
+    """Plot yearly auto theft counts in Toronto from 2014 to 2025 with 3 highlighted periods.
+
+    Parameters:
+        df: A cleaned DataFrame.
+
+    Returns:
+        None. Creates and draws the chart.
+    """
+    yearly = df.groupby('OCC_YEAR').size()
+
+    fig, ax = plt.subplots(figsize = (12, 6))
+
+    ax.plot(yearly.index, yearly.values, color = 'black', linewidth = 2, marker = 'o')
+    ax.axvspan(2017, 2021, color = 'red', alpha = 0.3, label = 'Early Increase')
+    ax.axvspan(2021, 2023, color = 'darkred', alpha = 0.5, label = 'Surge Period')
+    ax.axvspan(2023, 2025, color = 'green', alpha = 0.3, label = 'Slight Decline')
+
+    ax.set_title('Auto Theft in Toronto 2014-2025', fontsize = 16)
+    ax.set_xlabel('Year', fontsize = 13)
+    ax.set_ylabel('Number of Thefts', fontsize = 13)
+    ax.yaxis.set_major_locator(plt.MultipleLocator(2000))
+    ax.set_xticks(yearly.index)
+    ax.set_xticklabels(yearly.index, rotation = 45)
+    ax.set_ylim(bottom = 0)
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()
