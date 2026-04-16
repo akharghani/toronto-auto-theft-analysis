@@ -99,3 +99,70 @@ def top10_neighbourhoods_chart(df):
 
     plt.tight_layout()
     plt.show()
+
+def premises_proportions_table(df):
+    """Return a table showing the proportion of thefts by premise type in West Humber-Clairville year by year from 2021 to 2025.
+    
+    Parameters:
+        df: The cleaned DataFrame.
+    
+    Returns:
+        A DataFrame showing the percentage of thefts per premise type for each year.
+    """
+    filter_df = df[
+        (df['NEIGHBOURHOOD_158'] == 'West Humber-Clairville (1)') &
+        (df['OCC_YEAR'].between(2021, 2025))
+    ]
+
+    premises_grouped = (filter_df.groupby(['OCC_YEAR', 'PREMISES_TYPE']).size()
+                              .unstack(fill_value = 0)
+                              .drop(columns = ['Educational']))
+
+    premises_proportions = (premises_grouped.div(premises_grouped.sum(axis = 1), axis = 0 ) * 100).round().astype(str) + '%'
+    
+    return premises_proportions
+
+def premises_by_years_chart(df):
+    """Plot the number of thefts by premise type in West Humber-Clairville from 2021 to 2025.
+    
+    Parameters:
+        df: A clean DataFrame.
+    
+    Returns:
+        None. Created and draws the chart.
+    """
+    filter_df = df[
+        (df['NEIGHBOURHOOD_158'] == 'West Humber-Clairville (1)') &
+        (df['OCC_YEAR'].between(2021, 2025))
+    ]
+
+    grouped = (filter_df.groupby(['OCC_YEAR', 'PREMISES_TYPE']).size()
+                     .unstack(fill_value = 0)
+                     .drop(columns = ['Educational']))
+
+    premises = grouped.columns.tolist()
+    years = grouped.index.tolist()
+    width = 0.16
+    colors = ['firebrick', 'steelblue', 'orange', 'darkgreen', 'purple', 'gray']
+
+    fig, ax = plt.subplots(figsize = (14, 7))
+    ax.set_facecolor('whitesmoke')
+    fig.patch.set_facecolor('whitesmoke')
+
+    for i, (premise, color) in enumerate(zip(premises, colors)):
+        offsets = [_ + i * width for _ in range(len(years))]
+        bars = ax.bar(offsets, grouped[premise], width = width, label = premise, color = color)
+        ax.bar_label(bars, fontweight = 'bold', fontsize = 12)
+
+    ax.set_title('Premise Types Targeted in West Humber-Clairville from 2021-2025', fontsize = 16)
+    ax.set_xlabel('Year', fontsize = 14)
+    ax.set_ylabel('Number of Thefts', fontsize = 14)
+    ax.set_xticks([_ + width * 3 for _ in range(len(years))])
+    ax.set_xticklabels(years)
+    
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)    
+    ax.legend(title = 'Premise Type')
+
+    plt.tight_layout()
+    plt.show()
