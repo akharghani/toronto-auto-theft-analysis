@@ -27,6 +27,12 @@ def clean_dataset(df):
                                         "REPORT_DOW", "REPORT_HOUR"])
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.split('(').str[0]
     clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.strip()
+
+    clean_df['NEIGHBOURHOOD_158'] = clean_df['NEIGHBOURHOOD_158'].str.split('(').str[0]
+    clean_df['NEIGHBOURHOOD_158'] = clean_df['NEIGHBOURHOOD_158'].str.strip()
+    clean_df['NEIGHBOURHOOD_140'] = clean_df['NEIGHBOURHOOD_140'].str.split('(').str[0]
+    clean_df['NEIGHBOURHOOD_140'] = clean_df['NEIGHBOURHOOD_140'].str.strip()
+
     clean_df["OCC_YEAR"] = clean_df["OCC_YEAR"].astype(int)
     clean_df["OCC_DAY"] = clean_df["OCC_DAY"].astype(int)
     clean_df["OCC_DOY"] = clean_df["OCC_DOY"].astype(int)
@@ -110,7 +116,7 @@ def premises_proportions_table(df):
         A DataFrame showing the percentage of thefts per premise type for each year.
     """
     filter_df = df[
-        (df['NEIGHBOURHOOD_158'] == 'West Humber-Clairville (1)') &
+        (df['NEIGHBOURHOOD_158'] == 'West Humber-Clairville') &
         (df['OCC_YEAR'].between(2021, 2025))
     ]
 
@@ -132,7 +138,7 @@ def premises_by_years_chart(df):
         None. Created and draws the chart.
     """
     filter_df = df[
-        (df['NEIGHBOURHOOD_158'] == 'West Humber-Clairville (1)') &
+        (df['NEIGHBOURHOOD_158'] == 'West Humber-Clairville') &
         (df['OCC_YEAR'].between(2021, 2025))
     ]
 
