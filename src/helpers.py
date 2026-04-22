@@ -6,39 +6,106 @@ analysis, and visualization.
 """
 import matplotlib.pyplot as plt
 
+def strip_suffix(df, column):
+    """Remove parenthetical suffixes from a string column and strip whitespace.
+
+    Parameters:
+        df: The DataFrame containing the column.
+        column: The name of the column to clean.
+
+    Returns:
+        A Series with the suffix removed and whitespace stripped.
+    """
+    return df[column].str.split('(').str[0].str.strip()
+
+def convert_columns_to_int(df, columns):
+    """Convert a list of columns to integer type.
+
+    Parameters:
+        df: The DataFrame to modify.
+        columns: A list of column names to convert.
+
+    Returns:
+        The DataFrame with the specified columns cast to int.
+    """
+    for column in columns:
+        df[column] = df[column].astype(int)
+    return df
+
+def convert_columns_to_str(df, columns):
+    """Convert a list of columns to string type.
+
+    Parameters:
+        df: The DataFrame to modify.
+        columns: A list of column names to convert.
+
+    Returns:
+        The DataFrame with the specified columns cast to str.
+    """
+    for column in columns:
+        df[column] = df[column].astype(str)
+    return df
+
+def drop_columns(df):
+    """Drop columns not needed for analysis.
+
+    Parameters:
+        df: The DataFrame to modify.
+
+    Returns:
+        The DataFrame with unnecessary columns removed.
+    """
+    return df.drop(columns = ["OBJECTID", "EVENT_UNIQUE_ID",
+                             "LONG_WGS84", "LAT_WGS84", "x",
+                             "y", "REPORT_DATE",
+                             "OCC_DATE", "UCR_CODE", "UCR_EXT",
+                             "OFFENCE", "CSI_CATEGORY", "REPORT_YEAR",
+                             "REPORT_MONTH", "REPORT_DAY", "REPORT_DOY",
+                             "REPORT_DOW", "REPORT_HOUR"])
+
+def strip_column_suffixes(df):
+    """Strip parenthetical suffixes from location and neighbourhood columns.
+
+    Parameters:
+        df: The DataFrame to modify.
+
+    Returns:
+        The DataFrame with suffixes removed from LOCATION_TYPE, NEIGHBOURHOOD_158, and NEIGHBOURHOOD_140.
+    """
+    df["LOCATION_TYPE"] = strip_suffix(df, "LOCATION_TYPE")
+    df["NEIGHBOURHOOD_158"] = strip_suffix(df, "NEIGHBOURHOOD_158")
+    df["NEIGHBOURHOOD_140"] = strip_suffix(df, "NEIGHBOURHOOD_140")
+    return df
+
+def convert_column_types(df):
+    """Convert columns to their correct data types.
+
+    Parameters:
+        df: The DataFrame.
+
+    Returns:
+        The DataFrame with OCC_YEAR, OCC_DAY, and OCC_DOY cast to int and LOCATION_TYPE cast to str.
+    """
+    df = convert_columns_to_int(df, ["OCC_YEAR", "OCC_DAY", "OCC_DOY"])
+    df = convert_columns_to_str(df, ["LOCATION_TYPE"])
+    return df
+
 def clean_dataset(df):
     """Clean the raw dataset and return an analysis ready DataFrame.
 
     Parameter:
-        df: The raw DataFrame loaded in the notebook.
+        df: The raw DataFrame.
 
     Returns:
         A cleaned DataFrame with no missing values, removed unnecessary columns,
-        and standardized `LOCATION_TYPE`.
+        standardized LOCATION_TYPE, stripped neighbourhood names, and corrected column types.
     """
     clean_df = df.copy()
     clean_df = clean_df.dropna()
-    clean_df = clean_df.drop (columns = ["OBJECTID", "EVENT_UNIQUE_ID",
-                                        "LONG_WGS84", "LAT_WGS84", "x",
-                                        "y", "REPORT_DATE",
-                                        "OCC_DATE", "UCR_CODE", "UCR_EXT",
-                                        "OFFENCE", "CSI_CATEGORY", "REPORT_YEAR",
-                                        "REPORT_MONTH", "REPORT_DAY", "REPORT_DOY",
-                                        "REPORT_DOW", "REPORT_HOUR"])
-    clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.split('(').str[0]
-    clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].str.strip()
-
-    clean_df['NEIGHBOURHOOD_158'] = clean_df['NEIGHBOURHOOD_158'].str.split('(').str[0]
-    clean_df['NEIGHBOURHOOD_158'] = clean_df['NEIGHBOURHOOD_158'].str.strip()
-    clean_df['NEIGHBOURHOOD_140'] = clean_df['NEIGHBOURHOOD_140'].str.split('(').str[0]
-    clean_df['NEIGHBOURHOOD_140'] = clean_df['NEIGHBOURHOOD_140'].str.strip()
-
-    clean_df["OCC_YEAR"] = clean_df["OCC_YEAR"].astype(int)
-    clean_df["OCC_DAY"] = clean_df["OCC_DAY"].astype(int)
-    clean_df["OCC_DOY"] = clean_df["OCC_DOY"].astype(int)
+    clean_df = drop_columns(clean_df)
+    clean_df = strip_column_suffixes(clean_df)
+    clean_df = convert_column_types(clean_df)
     clean_df = clean_df[clean_df["OCC_YEAR"] >= 2014]
-    clean_df["LOCATION_TYPE"] = clean_df["LOCATION_TYPE"].astype(str)
-
     return clean_df
 
 def yearly_trends_chart(df):
