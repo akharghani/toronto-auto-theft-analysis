@@ -208,31 +208,32 @@ def premises_by_years_chart(df):
     ]
 
     grouped = (filter_df.groupby(['OCC_YEAR', 'PREMISES_TYPE']).size()
-                     .unstack(fill_value = 0)
-                     .drop(columns = ['Educational']))
+                     .unstack(fill_value = 0))
 
-    premises = grouped.columns.tolist()
+    grouped = grouped[['Outside', 'Commercial', 'House']]
+
     years = grouped.index.tolist()
-    width = 0.16
-    colors = ['firebrick', 'steelblue', 'orange', 'darkgreen', 'purple', 'gray']
+    premises = grouped.columns.tolist()
+    colors = ['crimson', 'lightgrey', 'steelblue']
+    width = 0.25
 
-    fig, ax = plt.subplots(figsize = (14, 7))
+    fig, ax = plt.subplots(figsize = (12, 7))
     ax.set_facecolor('whitesmoke')
     fig.patch.set_facecolor('whitesmoke')
 
     for i, (premise, color) in enumerate(zip(premises, colors)):
         offsets = [_ + i * width for _ in range(len(years))]
-        bars = ax.bar(offsets, grouped[premise], width = width, label = premise, color = color)
-        ax.bar_label(bars, fontweight = 'bold', fontsize = 12)
+        bars = ax.barh(offsets, grouped[premise], height = width, label = premise, color = color)
+        ax.bar_label(bars, padding = 5, fontweight = 'bold', fontsize = 11)
 
     ax.set_title('2021-2025: Premise Types Targeted in West Humber-Clairville', fontsize = 16)
-    ax.set_xlabel('Year', fontsize = 14)
-    ax.set_ylabel('Number of Thefts', fontsize = 14)
-    ax.set_xticks([_ + width * 3 for _ in range(len(years))])
-    ax.set_xticklabels(years)
-    
+    ax.set_ylabel('Year', fontsize = 14)
+    ax.set_xlabel('Number of Thefts', fontsize = 14)
+    ax.set_yticks([_ + width for _ in range(len(years))])
+    ax.set_yticklabels(years)
+
     ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)    
+    ax.spines['right'].set_visible(False)
     ax.legend(title = 'Premise Type')
 
     plt.tight_layout()
