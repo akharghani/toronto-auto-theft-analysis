@@ -122,9 +122,7 @@ def yearly_trends_chart(df):
     fig, ax = plt.subplots(figsize = (12, 6))
 
     ax.plot(yearly.index, yearly.values, color = 'black', linewidth = 2, marker = 'o')
-    ax.axvspan(2017, 2021, color = 'red', alpha = 0.3, label = 'Early Increase')
     ax.axvspan(2021, 2023, color = 'darkred', alpha = 0.5, label = 'Surge Period')
-    ax.axvspan(2023, 2025, color = 'green', alpha = 0.3, label = 'Slight Decline')
 
     ax.set_title('2014-2025: Auto Theft Trends in Toronto', fontsize = 16)
     ax.set_xlabel('Year', fontsize = 13)
@@ -158,7 +156,7 @@ def top10_neighbourhoods_chart(df):
     ax.set_facecolor('whitesmoke')
     fig.patch.set_facecolor('whitesmoke')
 
-    colors = ['red' if i == len(top10) - 1 else 'blue' for i in range(len(top10))]
+    colors = ['crimson' if i == len(top10) - 1 else 'slategrey' for i in range(len(top10))]
     bars = ax.barh(top10.index, top10.values, color = colors, edgecolor ='black', linewidth = 0.8, height = 0.6)
 
     ax.bar_label(bars, padding = 10, fontweight = 'bold', fontsize = 14)  
