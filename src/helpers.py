@@ -126,7 +126,7 @@ def yearly_trends_chart(df):
     ax.axvspan(2021, 2023, color = 'darkred', alpha = 0.5, label = 'Surge Period')
     ax.axvspan(2023, 2025, color = 'green', alpha = 0.3, label = 'Slight Decline')
 
-    ax.set_title('Auto Theft in Toronto 2014-2025', fontsize = 16)
+    ax.set_title('2014-2025: Auto Theft Trends in Toronto', fontsize = 16)
     ax.set_xlabel('Year', fontsize = 13)
     ax.set_ylabel('Number of Thefts', fontsize = 13)
     ax.yaxis.set_major_locator(plt.MultipleLocator(2000))
@@ -162,7 +162,7 @@ def top10_neighbourhoods_chart(df):
     bars = ax.barh(top10.index, top10.values, color = colors, edgecolor ='black', linewidth = 0.8, height = 0.6)
 
     ax.bar_label(bars, padding = 10, fontweight = 'bold', fontsize = 14)  
-    ax.set_title('Top 10 Most Affected Neighbourhoods by Auto Theft During 2021-2023', fontsize = 16)
+    ax.set_title('2021-2023 Surge: Top 10 Most Affected Neighbourhoods', fontsize = 16)
     ax.set_xlabel('Number of Thefts', fontsize = 10)
     ax.set_ylabel('Neighbourhood', fontsize = 10)
     ax.set_xlim(0, max(top10.values) + 500)
@@ -227,7 +227,7 @@ def premises_by_years_chart(df):
         bars = ax.bar(offsets, grouped[premise], width = width, label = premise, color = color)
         ax.bar_label(bars, fontweight = 'bold', fontsize = 12)
 
-    ax.set_title('Premise Types Targeted in West Humber-Clairville from 2021-2025', fontsize = 16)
+    ax.set_title('2021-2025: Premise Types Targeted in West Humber-Clairville', fontsize = 16)
     ax.set_xlabel('Year', fontsize = 14)
     ax.set_ylabel('Number of Thefts', fontsize = 14)
     ax.set_xticks([_ + width * 3 for _ in range(len(years))])
